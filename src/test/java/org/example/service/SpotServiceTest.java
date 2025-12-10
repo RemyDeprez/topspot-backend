@@ -26,12 +26,15 @@ import static org.mockito.Mockito.*;
 class SpotServiceTest {
 
     @Mock
+    @SuppressWarnings("unused")
     private SpotRepository spotRepository;
 
     @Mock
+    @SuppressWarnings("unused")
     private SecurityContext securityContext;
 
     @Mock
+    @SuppressWarnings("unused")
     private Authentication authentication;
 
     @InjectMocks

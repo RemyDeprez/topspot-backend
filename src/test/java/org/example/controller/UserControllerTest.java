@@ -25,19 +25,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class UserControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    public UserControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
 
     @MockBean
+    @SuppressWarnings("unused")
     private UserService userService;
 
     @MockBean
+    @SuppressWarnings("unused")
     private JwtService jwtService;
 
     @MockBean
+    @SuppressWarnings("unused")
     private UserDetailsService userDetailsService;
 
     @Test

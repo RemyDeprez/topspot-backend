@@ -23,9 +23,11 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     @Mock
+    @SuppressWarnings("unused")
     private UserRepository userRepository;
 
     @Mock
+    @SuppressWarnings("unused")
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks

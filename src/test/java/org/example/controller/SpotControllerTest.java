@@ -29,19 +29,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class SpotControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    public SpotControllerTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
 
     @MockBean
+    @SuppressWarnings("unused")
     private SpotService spotService;
 
     @MockBean
+    @SuppressWarnings("unused")
     private JwtService jwtService;
 
     @MockBean
+    @SuppressWarnings("unused")
     private UserDetailsService userDetailsService;
 
     @Test
