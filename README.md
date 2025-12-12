@@ -5,10 +5,10 @@ API REST Spring Boot sécurisée avec JWT pour la gestion de spots de skateboard
 ## 🚀 Technologies
 
 - **Java 21**
-- **Spring Boot 3.2.0**
+- **Spring Boot 3.4.12**
 - **Spring Security** avec JWT
 - **Spring Data JPA**
-- **H2 Database** (développement)
+- **H2 Database** (avec persistance sur fichier)
 - **Maven**
 - **Lombok**
 
@@ -19,87 +19,89 @@ API REST Spring Boot sécurisée avec JWT pour la gestion de spots de skateboard
 
 ## 🔧 Installation
 
-1. Cloner le projet
-```bash
-cd topspot-backend
-```
+1.  Cloner le projet
+2.  Naviguer dans le dossier du projet :
+    ```bash
+    cd topspot-backend
+    ```
+3.  Installer les dépendances :
+    ```bash
+    mvn clean install
+    ```
+4.  Lancer l'application :
+    ```bash
+    mvn spring-boot:run
+    ```
 
-2. Installer les dépendances
-```bash
-mvn clean install
-```
+L'application sera accessible sur `http://localhost:8080`.
 
-3. Lancer l'application
-```bash
-mvn spring-boot:run
-```
+## 🗃️ Base de Données
 
-L'application sera accessible sur `http://localhost:8080`
+La base de données H2 est configurée pour persister les données sur le disque. Le fichier de la base de données se trouvera à la racine du projet dans le dossier `data/` (`./data/topspotdb`).
 
 ## 🔐 Authentification
 
-L'API utilise JWT (JSON Web Tokens) pour l'authentification. Tous les endpoints (sauf `/api/auth/**`) nécessitent un token valide.
+L'API utilise JWT (JSON Web Tokens) pour l'authentification. Tous les endpoints (sauf `/api/auth/**`) nécessitent un token valide dans l'en-tête `Authorization`.
 
 ### Endpoints d'authentification
 
-~~#### Inscription
-```http
-POST /api/auth/register
-Content-Type: application/json
+#### Inscription
 
-{
-  "username": "john_doe",
-  "email": "john@example.com",
-  "password": "SecurePassword123"
-}
-```
+Crée un nouvel utilisateur.
 
-**Réponse :**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "username": "john_doe",
-  "email": "john@example.com"
-}
-```
+- **Endpoint** : `POST /api/auth/register`
+- **Body** :
+  ```json
+  {
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "SecurePassword123"
+  }
+  ```
+- **Réponse (201 Created)** :
+  ```json
+  {
+    "message": "User registered successfully"
+  }
+  ```
 
 #### Connexion
-```http
-POST /api/auth/login
-Content-Type: application/json
 
-{
-  "username": "john_doe",
-  "password": "SecurePassword123"
-}
-```
+Authentifie un utilisateur et retourne un token JWT.
 
-**Réponse :**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "username": "john_doe",
-  "email": "john@example.com"
-}
-```
+- **Endpoint** : `POST /api/auth/login`
+- **Body** :
+  ```json
+  {
+    "username": "john_doe",
+    "password": "SecurePassword123"
+  }
+  ```
+- **Réponse (200 OK)** :
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiJ9...",
+    "username": "john_doe"
+  }
+  ```
 
 ## 📍 Endpoints Spot
 
 ### Récupérer tous les spots
-```http
-GET /api/spots
-Authorization: Bearer {token}
-```
 
-**Réponse :**
-```json
-[
-  {
-    "id": 1,
-    "name": "Skatepark Central",
-    "description": "Super skatepark avec bowl et street",
-    "location": "Paris",
-    "latitude": 48.8566,
+- **Endpoint** : `GET /api/spots`
+- **Authentification** : Requise (Bearer Token)
+- **Réponse (200 OK)** :
+  ```json
+  [
+    {
+      "id": 1,
+      "name": "Skatepark Central",
+      "description": "Super skatepark avec bowl et street",
+      "location": "Paris"
+    }
+  ]
+  ```    "latitude": 48.8566,
     "longitude": 2.3522,
     "createdBy": "john_doe"
   }

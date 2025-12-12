@@ -71,35 +71,11 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        try {
-            // Essaye d'appeler parserBuilder (jjwt >= 0.11)
-            Method parserBuilderMethod = Jwts.class.getMethod("parserBuilder");
-            Object parserBuilder = parserBuilderMethod.invoke(null);
-            Method setSigningKey = parserBuilder.getClass().getMethod("setSigningKey", Key.class);
-            Object builderWithKey = setSigningKey.invoke(parserBuilder, getSignInKey());
-            Method buildMethod = builderWithKey.getClass().getMethod("build");
-            Object parser = buildMethod.invoke(builderWithKey);
-            Method parseClaimsJws = parser.getClass().getMethod("parseClaimsJws", String.class);
-            Object jws = parseClaimsJws.invoke(parser, token);
-            Method getBody = jws.getClass().getMethod("getBody");
-            return (Claims) getBody.invoke(jws);
-        } catch (NoSuchMethodException nsme) {
-            try {
-                // Fallback vers l'ancienne API : Jwts.parser()
-                Method parserMethod = Jwts.class.getMethod("parser");
-                Object parser = parserMethod.invoke(null);
-                Method setSigningKey = parser.getClass().getMethod("setSigningKey", Key.class);
-                Object parserWithKey = setSigningKey.invoke(parser, getSignInKey());
-                Method parseClaimsJws = parserWithKey.getClass().getMethod("parseClaimsJws", String.class);
-                Object jws = parseClaimsJws.invoke(parserWithKey, token);
-                Method getBody = jws.getClass().getMethod("getBody");
-                return (Claims) getBody.invoke(jws);
-            } catch (Exception ex) {
-                throw new RuntimeException("Failed to parse JWT with fallback parser()", ex);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse JWT", e);
-        }
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Key getSignInKey() {
